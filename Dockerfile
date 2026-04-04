@@ -8,7 +8,11 @@ RUN npm run build
 
 # Production stage
 FROM nginx:alpine
+
+ENV PORT=8080
+
+COPY default.conf.template /etc/nginx/templates/default.conf.template
 COPY --from=build /app/dist /usr/share/nginx/html
-# Custom nginx config to handle SPA routing if needed, though this app is simple
-EXPOSE 80
+
+EXPOSE 8080
 CMD ["nginx", "-g", "daemon off;"]
