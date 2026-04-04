@@ -16,6 +16,7 @@ let isRecording = false;
 let isAutoScrollEnabled = true;
 let audioChunks: Uint8Array[] = [];
 let loadingInterval: any = null;
+let GEMINI_API_KEY = "";
 
 // UI Elements
 const gatewayInput = document.getElementById('gateway-url') as HTMLInputElement;
@@ -36,16 +37,37 @@ const mobileTrigger = document.getElementById('mobile-trigger') as HTMLDivElemen
 async function init() {
     console.log("Initializing OpenClaw Assistant...");
     
+    // Load API Key from runtime config or build env
+    try {
+        const res = await fetch('/config.json');
+        if (res.ok) {
+            const config = await res.json();
+            if (config.GEMINI_API_KEY) {
+                GEMINI_API_KEY = config.GEMINI_API_KEY;
+            }
+        }
+    } catch (e) {
+        console.warn("Failed to load config.json, checking environment variables.");
+    }
+
+    if (!GEMINI_API_KEY && (import.meta as any).env?.VITE_GEMINI_API_KEY) {
+        GEMINI_API_KEY = (import.meta as any).env.VITE_GEMINI_API_KEY;
+    }
+
     // Load saved settings
     const savedGateway = localStorage.getItem('openclaw_gateway');
-    if (savedGateway) {
-        if (savedGateway === "ws://127.0.0.1:18789") {
-            gatewayInput.value = "ws://100.114.85.125:18789";
-            localStorage.setItem('openclaw_gateway', gatewayInput.value);
-        } else {
-            gatewayInput.value = savedGateway;
-        }
-    } 
+    const defaultGateway = "wss://davids-mac-mini.taild84156.ts.net";
+
+    // Override old HTTP/WS defaults with the new secure WSS default
+    if (savedGateway && !savedGateway.startsWith('wss://') && (savedGateway.includes('192.168.') || savedGateway.includes('100.') || savedGateway.includes('127.0.0.1'))) {
+        gatewayInput.value = defaultGateway;
+        localStorage.setItem('openclaw_gateway', defaultGateway);
+    } else if (savedGateway) {
+        gatewayInput.value = savedGateway;
+    } else {
+        gatewayInput.value = defaultGateway;
+    }
+
     const savedModel = localStorage.getItem('openclaw_model');
     if (savedModel) {
         currentModel = savedModel;
@@ -191,10 +213,13 @@ async function transcribeAudio(base64Wav: string) {
     try {
         updateGlasses("Processing..."); // Set to Processing state with spinner
 
+        if (!GEMINI_API_KEY) {
+            throw new Error("GEMINI_API_KEY is not configured.");
+        }
+
         // Use Gemini 3 Flash Preview for cutting-edge STT performance
-        const GEMINI_KEY = "AIzaSyAUKa7l3gSenmsuZBN_s4vOtB3-sQtFO20"; 
         const response = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${GEMINI_KEY}`,
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${GEMINI_API_KEY}`,
             {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
