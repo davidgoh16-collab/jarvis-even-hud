@@ -183,14 +183,14 @@ async function transcribeAudio(base64Wav) {
         if (!GEMINI_API_KEY) {
             throw new Error("GEMINI_API_KEY is not configured.");
         }
-        // Use Gemini 3 Flash Preview for cutting-edge STT performance
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${GEMINI_API_KEY}`, {
+        // Use Gemini 1.5 Flash for stable and less hallucinatory STT performance
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 contents: [{
                         parts: [
-                            { text: "Transcribe the following audio accurately. Reply ONLY with the transcription text, nothing else. If it's silent or no speech, return exactly: NO_VOICE" },
+                            { text: "Transcribe the following audio accurately. Reply ONLY with the exact transcription text. Do not add any conversational filler, context, or music descriptions. If the audio is silent, contains only static/noise, or has no discernible human speech, you must return exactly: NO_VOICE" },
                             { inlineData: { mimeType: "audio/wav", data: base64Wav } }
                         ]
                     }]
@@ -514,6 +514,7 @@ function sendText(text) {
         params: {
             sessionKey: "main",
             message: text,
+            model: currentModel,
             idempotencyKey: reqId
         }
     };
