@@ -56,14 +56,18 @@ async function init() {
 
     // Load saved settings
     const savedGateway = localStorage.getItem('openclaw_gateway');
-    if (savedGateway) {
-        if (savedGateway === "ws://127.0.0.1:18789") {
-            gatewayInput.value = "ws://100.114.85.125:18789";
-            localStorage.setItem('openclaw_gateway', gatewayInput.value);
-        } else {
-            gatewayInput.value = savedGateway;
-        }
-    } 
+    const defaultGateway = "wss://davids-mac-mini.taild84156.ts.net";
+
+    // Override old HTTP/WS defaults with the new secure WSS default
+    if (savedGateway && !savedGateway.startsWith('wss://') && (savedGateway.includes('192.168.') || savedGateway.includes('100.') || savedGateway.includes('127.0.0.1'))) {
+        gatewayInput.value = defaultGateway;
+        localStorage.setItem('openclaw_gateway', defaultGateway);
+    } else if (savedGateway) {
+        gatewayInput.value = savedGateway;
+    } else {
+        gatewayInput.value = defaultGateway;
+    }
+
     const savedModel = localStorage.getItem('openclaw_model');
     if (savedModel) {
         currentModel = savedModel;
