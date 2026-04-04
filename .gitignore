@@ -1,0 +1,12 @@
+node_modules
+dist
+dist-ssr
+*.local
+.vscode
+.DS_Store
+*.ehpk
+jarvis-assistant-*.ehpk
+out.ehpk
+.env
+.env.*
+!.env.example

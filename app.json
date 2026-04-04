@@ -1,0 +1,23 @@
+{
+  "package_id": "com.evenrealities.jarvis",
+  "edition": "202601",
+  "name": "J.A.R.V.I.S. HUD",
+  "version": "1.1.0",
+  "min_app_version": "2.0.0",
+  "min_sdk_version": "0.0.7",
+  "entrypoint": "index.html",
+  "icon": "icon.png",
+  "permissions": [
+    {
+      "name": "network",
+      "desc": "Used to connect to your OpenClaw gateway"
+    },
+    {
+      "name": "g2-microphone",
+      "desc": "Used to use the glasses microphone to dictate text to AI models"
+    }
+  ],
+  "supported_languages": [
+    "en"
+  ]
+}

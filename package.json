@@ -1,0 +1,21 @@
+{
+  "name": "even-openclaw-client",
+  "version": "0.5.3",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "pack": "evenhub pack app.json dist",
+    "preview": "vite preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@evenrealities/even_hub_sdk": "^0.0.9",
+    "typescript": "^6.0.2",
+    "vite": "^6.2.0"
+  }
+}

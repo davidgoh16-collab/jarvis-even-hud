@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>J.A.R.V.I.S. Protocol</title>
+    <link rel="stylesheet" href="/src/style.css">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#00ffcc">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <!-- HUD Interface -->
+        <div class="hud-wrapper">
+            <div class="arc-reactor" id="arc-reactor">
+                <div class="reactor-ring ring-bg"></div>
+                <div class="reactor-ring ring-base"></div>
+                <div class="reactor-ring ring-outer"></div>
+                <div class="reactor-ring ring-middle"></div>
+                <div class="reactor-ring ring-inner"></div>
+                <div class="reactor-ring ring-core"></div>
+                
+                <!-- Center Status Text -->
+                <div class="text-core" id="reactor-text">J.A.R.V.I.S.</div>
+            </div>
+            
+            <div class="status-panel">
+                <div id="status-text" class="status-msg">INITIALIZING SYSTEMS...</div>
+                <div id="glasses-sync" class="glasses-sync">GLASSES WAITING...</div>
+            </div>
+
+            <!-- Dashboard Transcript -->
+            <div id="chat-history" class="chat-transcript"></div>
+        </div>
+
+        <!-- Hidden functionality needed for JS -->
+        <div id="openclaw-config" style="display:none;">
+            <input type="text" id="gateway-url" value="ws://192.168.86.31:18789">
+            <button id="connect-btn">Connect</button>
+            <button id="disconnect-btn">Disconnect</button>
+            <button id="talk-btn">Talk</button>
+            <select id="model-selector">
+                <option value="openai/claude-3-5-sonnet">J.A.R.V.I.S. (Claude)</option>
+                <option value="ollama/qwen2.5-coder:14b">Qwen 2.5 (Local)</option>
+                <option value="google/gemini-1.5-flash">Gemini 1.5</option>
+            </select>
+        </div>
+        
+        <div class="g2-sim" style="display:none;"><div id="g2-text"></div></div>
+        
+        <!-- Hidden Canvas for Glasses UI Rendering -->
+        <canvas id="glasses-canvas" width="80" height="80" style="display:none;"></canvas>
+    </div>
+
+    <!-- Clickable trigger for testing on phone if needed -->
+    <div id="mobile-trigger" class="mobile-trigger"></div>
+
+    <script type="module" src="/src/main.ts"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js');
+        });
+      }
+    </script>
+</body>
+</html>
