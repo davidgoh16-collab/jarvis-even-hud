@@ -270,16 +270,20 @@ function combineChunks(chunks) {
 async function setupGlassesUI() {
     if (!bridge)
         return;
+    const textNode = new TextContainerProperty({
+        xPosition: 0,
+        yPosition: 0,
+        width: 576,
+        height: 288,
+        borderWidth: 0,
+        borderColor: 5,
+        paddingLength: 4,
+        containerID: 1,
+        containerName: "main_text",
+        content: "\n\n   J.A.R.V.I.S.\n\n     Online",
+        isEventCapture: 1,
+    });
     const page = new CreateStartUpPageContainer();
-    const textNode = new TextContainerProperty();
-    textNode.containerID = 1;
-    textNode.containerName = "main_text";
-    textNode.content = "\n\n   J.A.R.V.I.S.\n\n     Online";
-    textNode.width = 576;
-    textNode.height = 288;
-    textNode.xPosition = 0;
-    textNode.yPosition = 0;
-    textNode.isEventCapture = 1;
     page.containerTotalNum = 1;
     page.textObject = [textNode];
     try {
