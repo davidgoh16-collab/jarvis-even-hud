@@ -190,7 +190,7 @@ async function transcribeAudio(base64Wav) {
             body: JSON.stringify({
                 contents: [{
                         parts: [
-                            { text: "Transcribe the following audio accurately. Reply ONLY with the transcription text, nothing else. If it's silent or no speech, return exactly: NO_VOICE" },
+                            { text: "Transcribe the following audio accurately. Reply ONLY with the exact transcription text. Do not add any conversational filler, context, or music descriptions. If the audio is silent, contains only static/noise, or has no discernible human speech, you must return exactly: NO_VOICE" },
                             { inlineData: { mimeType: "audio/wav", data: base64Wav } }
                         ]
                     }]
@@ -514,6 +514,7 @@ function sendText(text) {
         params: {
             sessionKey: "main",
             message: text,
+            model: currentModel,
             idempotencyKey: reqId
         }
     };
