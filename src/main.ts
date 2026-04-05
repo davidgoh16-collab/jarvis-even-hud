@@ -563,7 +563,6 @@ function sendText(text: string) {
         params: {
             sessionKey: "main",
             message: text,
-            model: currentModel,
             idempotencyKey: reqId
         }
     };
